@@ -3,7 +3,7 @@
 # 🎬 The Simpsons - Recreación de Animación de Fortnite
 
 <div align="center">
-  <img src="./src/assets/simpsons-title.svg" alt="The Simpsons Logo" width="600"/>
+  <img src="/src/assets/simpsons-title.svg" alt="The Simpsons Logo" width="600"/>
 </div>
 
 ## 🌟 Motivación del Proyecto
