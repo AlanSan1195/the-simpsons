@@ -1,0 +1,30 @@
+---
+import fetchSimpsons from "../services/fetch.js";
+
+const characters = await fetchSimpsons();
+---
+
+
+<section class="relative w-full h-auto min-h-screen">
+  <div class="relative z-10 flex flex-col items-center justify-center gap-4 p-4">
+    <h2 class="text-3xl font-bold text-center">Personajes de Los Simpsons</h2>
+    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 w-full">
+      {
+        characters.map((character: any) => (
+          <div class="bg-yellow-400 rounded-lg overflow-hidden shadow-lg">
+            <img
+              src={`https://cdn.thesimpsonsapi.com/500${character.portrait_path}`}
+              alt={character.name}
+              class="w-full h-48 object-cover"
+            />
+            <div class="p-4">
+              <h3 class="text-lg font-semibold">{character.name}</h3>
+              <p class="text-sm">Edad: {character.age || "Desconocida"}</p>
+              <p class="text-sm">Género: {character.gender}</p>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

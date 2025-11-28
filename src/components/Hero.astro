@@ -1,16 +1,30 @@
+---
+import IntoScreen from "./IntoScreen.astro";
+---
+
 <section class="bg-blue-300 relative">
   <div
     id="hero-title"
     class="items-center justify-center flex min-h-screen fixed inset-0 bg-transparent z-10 pointer-events-none"
   >
-  <img id="img-log" src="/simpsons-title.svg" alt="">
+    <img id="img-log" src="/simpsons-title.svg" alt="" />
     <!-- Contenido que se verá a través de la máscara -->
   </div>
 
   <!-- Contenido adicional para crear scroll -->
-  <div id="scroll-content" class="min-h-[300vh] relative z-0 opacity-0 border-2 border-red-500">
-    <div class="h-screen w-full bg-white flex  justify-center sticky top-0 items-center">
-      <h1 class="text-5xl font-bold text-center text-gray-800">Trabajando... 👨🏻‍💻</h1>
+  <div
+    id="scroll-content"
+    class="min-h-[700vh] max-w-7xl relative opacity-0 justify-center "
+  >
+    <img
+      src="/sofa.jpg"
+      alt="sofa de los simpsons"
+      class="fixed w-full h-auto object-cover"
+    />
+    <div
+      class="h-auto w-full flex-col justify-center  sticky top-0 items-center "
+    >
+      <!-- <IntoScreen /> -->
     </div>
   </div>
 </section>
@@ -31,12 +45,11 @@
   });
 
   // Ambas animaciones al mismo tiempo usando "<"
-  tl.to("#img-log", { scale: 100, duration: 3 })
+  tl.to("#img-log", { scale: 120, duration: 3 })
     .to("#img-log", { y: 4000, duration: 3 }, "<")
     .to("#img-log", { x: -800, duration: 3 }, "<")
     // aparece un segundo antes del final de la continuacion de la transicion
     .to("#scroll-content", { opacity: 1, duration: 1 }, "<1");
-
 </script>
 
 <style>
