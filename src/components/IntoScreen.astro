@@ -1,30 +1,53 @@
 ---
-import fetchSimpsons from "../services/fetch.js";
+import { fetchSimpsons } from "../services/fetch.js";
 
-const characters = await fetchSimpsons();
+const allCharacters = await fetchSimpsons();
+
+interface Character {
+  id: number;
+  name: string;
+  portrait_path: string;
+  age?: number;
+  phrases?: string[];
+}
+const specificNames = [
+  "Homer Simpson",
+  "Bart Simpson",
+  "Moe Szyslak",
+  "Krusty the Clown",
+];
+const characters = allCharacters.filter((char: Character) =>
+  specificNames.includes(char.name)
+);
 ---
 
+<div
+  id="content-characters"
+  class=" super-effect h-auto max-w-3xl flex flex-col mx-auto transform translate-y-1/2 items-center justify-center gap-4 p-4  rounded-lg"
+>
 
-<section class="relative w-full h-auto min-h-screen">
-  <div class="relative z-10 flex flex-col items-center justify-center gap-4 p-4">
-    <h2 class="text-3xl font-bold text-center">Personajes de Los Simpsons</h2>
-    <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-4 w-full">
-      {
-        characters.map((character: any) => (
-          <div class="bg-yellow-400 rounded-lg overflow-hidden shadow-lg">
-            <img
-              src={`https://cdn.thesimpsonsapi.com/500${character.portrait_path}`}
-              alt={character.name}
-              class="w-full h-48 object-cover"
-            />
-            <div class="p-4">
-              <h3 class="text-lg font-semibold">{character.name}</h3>
-              <p class="text-sm">Edad: {character.age || "Desconocida"}</p>
-              <p class="text-sm">Género: {character.gender}</p>
-            </div>
+  <div class="grid grid-cols-2 md:grid-cols-4 gap-4 w-full">
+    {
+      characters.map((character: Character) => (
+        <div id={`card-${character.id}`} class="backdrop-blur-xs bg-white/10 border-2 border-white/20 rounded-lg overflow-hidden shadow-md opacity-0">
+          <img
+            src={`https://cdn.thesimpsonsapi.com/500${character.portrait_path}`}
+            alt={character.name}
+            class="w-auto object-cover"
+          />
+          <div class="p-4">
+            <h3 class="text-lg font-semibold">{character.name}</h3>
+            <p class="text-sm"> {character.phrases?.[2]}</p>
           </div>
-        ))
-      }
-    </div>
+        </div>
+      ))
+    }
   </div>
-</section>
+</div>
+
+<style>
+  .super-effect {
+    /* left,center,rigth y los rotate es irlos toqueteando */
+    transform: translate3d(-20%, 70%, 0px) rotateX(-19.3393deg) rotateY(20.2789deg)   rotateZ(2.5deg) scale3d(1.1,1.2,1);
+  }
+</style>
