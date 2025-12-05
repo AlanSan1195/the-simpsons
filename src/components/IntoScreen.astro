@@ -18,20 +18,20 @@ const specificNames = [
   "Maggie Simpson",
 
 ];
-const characters = allCharacters.filter((char: Character) =>
+const characters = allCharacters.filter((char: any) =>
   specificNames.includes(char.name)
 );
 ---
 
 <div
   id="content-characters"
-  class=" super-effect h-auto max-w-4xl flex flex-col mx-auto transform translate-y-1/2 items-center justify-center gap-4 p-4  rounded-lg"
+  class=" h-auto max-w-4xl flex flex-col mx-auto transform translate-y-1/2 items-center justify-center gap-4 p-4  rounded-lg super-effect "
 >
 
-  <div class="grid grid-cols-2 md:grid-cols-5 gap-4 w-full">
+  <div class="grid grid-cols-2 md:grid-cols-5 gap-4 w-full h-auto ">
     {
-      characters.map((character: Character) => (
-        <div id={`card-${character.id}`} class="backdrop-blur-xs bg-white/10 border-2 border-white/20 rounded-lg overflow-hidden shadow-md opacity-0">
+      characters.map((character: any) => (
+        <div id={`card-${character.id}`} class="backdrop-blur-xs bg-white/10 border-2 border-white/20 rounded-lg  shadow-md opacity-0 hover:cursor-pointer  hover:scale-125 ">
           <img
             src={`https://cdn.thesimpsonsapi.com/500${character.portrait_path}`}
             alt={character.name}
@@ -50,6 +50,20 @@ const characters = allCharacters.filter((char: Character) =>
 <style>
   .super-effect {
     /* left,center,rigth y los rotate es irlos toqueteando */
-    transform: translate3d(-20%, 70%, 0px) rotateX(-19.3393deg) rotateY(20.2789deg)   rotateZ(2.5deg) scale3d(1.1,1.2,1);
+    transform: translate3d(-20%, 70%, 0px) rotateX(-19.3393deg) rotateY(20.2789deg)   rotateZ(2.5deg) scale3d(1.1, 1.2, 1);
   }
+
+  /* @keyframes rotateAnimation {
+    0% {
+      rotate: 0;
+      scale: 1;
+    }
+    100% {
+      rotate: 3deg;
+      scale: 1.2;
+    }
+  }
+  .animate-rotate:hover {
+    animation: rotateAnimation 500ms ease alternate-reverse ;
+  } */
 </style>
