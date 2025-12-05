@@ -38,6 +38,8 @@ import IntoScreen from "./IntoScreen.astro";
   import { ScrollTrigger } from "gsap/ScrollTrigger";
   gsap.registerPlugin(ScrollTrigger);
 
+
+  // configuración basica que uso con frecuencia para mi estrategia de scroll
   const tl = gsap.timeline({
     scrollTrigger: {
       trigger: "section",
@@ -55,10 +57,11 @@ import IntoScreen from "./IntoScreen.astro";
     // aparece un segundo antes del final de la continuacion de la transicion
     .to("#scroll-content", { opacity: 1, duration: 0.2 }, "<0.3")
     // .to("#content-characters", { opacity: 1, duration: 0.5 }, "<0.4")
-    .to("#card-1", { opacity: 1, y: -40, duration: 0.8 }, "<0.5") // Homer
-    .to("#card-3", { opacity: 1, y: -40, duration: 0.8 }, "<0.9") // Bart
-    .to("#card-15", { opacity: 1, y: -40, duration: 0.8 }, "<0.8") // Krusty
-    .to("#card-16", { opacity: 1, y: -40, duration: 0.8 }, "<0.7"); // Moe
+    .to("#card-1", { opacity: 1, y: -40, duration: 0.8 }, "<0.7") // Homer
+    .to("#card-2", { opacity: 1, y: -40, duration: 0.8 }, "<1.1") // Marge
+    .to("#card-3", { opacity: 1, y: -40, duration: 0.8 }, "<1.5") // Bart
+    .to("#card-4", { opacity: 1, y: -40, duration: 0.8 }, "<1.9") // Lisa
+    .to("#card-5", { opacity: 1, y: -40, duration: 0.8 }, "<2.3"); // Maggie
 </script>
 
 <style>

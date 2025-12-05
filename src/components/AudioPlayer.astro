@@ -1,0 +1,66 @@
+---
+---
+
+<header class="fixed top-0 right-0 z-50 p-4 ">
+  <button
+    id="audio-toggle"
+    class="bg-yellow-400 hover:bg-yellow-500 text-black p-3 rounded-full shadow-lg transition-all duration-300 hover:cursor-pointer"
+    aria-label="Toggle audio"
+  >
+    <svg id="icon-sound" class="w-6 h-6 pointer-events-none" fill="currentColor" viewBox="0 0 20 20">
+      <path d="M10 3.75a.75.75 0 00-1.264-.546L4.703 7H3.167a.75.75 0 00-.75.75v4.5c0 .414.336.75.75.75h1.536l4.033 3.796A.75.75 0 0010 16.25V3.75zM12.78 5.22a.75.75 0 10-1.06 1.06A3.5 3.5 0 0113 10a3.5 3.5 0 01-1.28 2.72.75.75 0 101.06 1.06A5 5 0 0014.5 10a5 5 0 00-1.72-3.78zM15.657 3.343a.75.75 0 10-1.06 1.06A6.5 6.5 0 0116.5 10a6.5 6.5 0 01-1.903 4.597.75.75 0 001.06 1.06A8 8 0 0018 10a8 8 0 00-2.343-5.657z"/>
+    </svg>
+    <svg id="icon-mute" class="w-6 h-6 hidden pointer-events-none" fill="currentColor" viewBox="0 0 20 20">
+      <path d="M10 3.75a.75.75 0 00-1.264-.546L4.703 7H3.167a.75.75 0 00-.75.75v4.5c0 .414.336.75.75.75h1.536l4.033 3.796A.75.75 0 0010 16.25V3.75zM14.78 7.22a.75.75 0 10-1.06 1.06L15.44 10l-1.72 1.72a.75.75 0 101.06 1.06L16.5 11.06l1.72 1.72a.75.75 0 101.06-1.06L17.56 10l1.72-1.72a.75.75 0 00-1.06-1.06L16.5 8.94l-1.72-1.72z"/>
+    </svg>
+  </button>
+</header>
+
+<audio id="background-music" loop>
+  <source src="/Simpsons.m4a" type="audio/mp4" />
+</audio>
+
+<script>
+  const audio = document.getElementById('background-music') as HTMLAudioElement;
+  const toggleBtn = document.getElementById('audio-toggle');
+  const iconSound = document.getElementById('icon-sound');
+  const iconMute = document.getElementById('icon-mute');
+  
+  let isPlaying = false;
+
+  // Intentar reproducir automáticamente
+  const playAudio = async () => {
+    try {
+      await audio.play();
+      isPlaying = true;
+      iconSound?.classList.remove('hidden');
+      iconMute?.classList.add('hidden');
+    } catch (error) {
+      isPlaying = false;
+    }
+  };
+
+  // Toggle de audio
+  toggleBtn?.addEventListener('click', async () => {
+    if (isPlaying) {
+      audio.pause();
+      isPlaying = false;
+      iconSound?.classList.add('hidden');
+      iconMute?.classList.remove('hidden');
+    } else {
+      await playAudio();
+    }
+  });
+
+  // Intentar reproducir al cargar la página
+//   document.addEventListener('DOMContentLoaded', () => {
+//     playAudio();
+//   });
+
+//   // Si el autoplay falla, reproducir al primer clic/interacción
+//   document.addEventListener('click', () => {
+//     if (!isPlaying) {
+//       playAudio();
+//     }
+//   }, { once: true });
+</script>

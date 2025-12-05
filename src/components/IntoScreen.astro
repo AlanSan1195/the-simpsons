@@ -13,8 +13,10 @@ interface Character {
 const specificNames = [
   "Homer Simpson",
   "Bart Simpson",
-  "Moe Szyslak",
-  "Krusty the Clown",
+  "Marge Simpson",
+  "Lisa Simpson",
+  "Maggie Simpson",
+
 ];
 const characters = allCharacters.filter((char: Character) =>
   specificNames.includes(char.name)
@@ -23,10 +25,10 @@ const characters = allCharacters.filter((char: Character) =>
 
 <div
   id="content-characters"
-  class=" super-effect h-auto max-w-3xl flex flex-col mx-auto transform translate-y-1/2 items-center justify-center gap-4 p-4  rounded-lg"
+  class=" super-effect h-auto max-w-4xl flex flex-col mx-auto transform translate-y-1/2 items-center justify-center gap-4 p-4  rounded-lg"
 >
 
-  <div class="grid grid-cols-2 md:grid-cols-4 gap-4 w-full">
+  <div class="grid grid-cols-2 md:grid-cols-5 gap-4 w-full">
     {
       characters.map((character: Character) => (
         <div id={`card-${character.id}`} class="backdrop-blur-xs bg-white/10 border-2 border-white/20 rounded-lg overflow-hidden shadow-md opacity-0">
