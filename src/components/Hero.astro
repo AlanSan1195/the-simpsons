@@ -2,40 +2,30 @@
 import IntoScreen from "./IntoScreen.astro";
 ---
 
-<section id="bg-hero" class="bg-blue-300 relative">
+<section id="bg-hero" class="bg-blue-300 relative min-h-[400vh]">
   <div
     id="hero-title"
-    class="items-center justify-center flex min-h-screen fixed inset-0  bg-transparent z-20"
+    class="items-center justify-center flex min-h-screen fixed inset-0 z-20 "
   >
-    <img id="img-log" src="/simpsons-title.svg" alt="" />
-  </div>
-  
-  <!-- Contenido adicional para crear scroll -->
-  <!-- Contenido que se verá a través del titulo como mascara, ira escalando con el scroll -->
-   <div class="w-full h-auto fixed top-[42%] left-0 flex justify-center  ">
-
-     <img
-       id="sofa-img-circle"
-       src="/sofa.jpg"
-       alt="sofa de los simpsons"
-       class="w-15 h-15  rounded-full"
-     />
-   </div>
-  <!-- 1 -->
-  <div id="scroll-content" class="min-h-[400vh] w-full relative opacity-0">
-    <!-- 2 -->
-    <div id="scroll-content" class="min-h-[400vh] w-full relative opacity-0">
+    <img id="img-log" src="/simpsons-title.svg" alt="" class="z-20 " />
+    <div
+      class="w-full h-full fixed inset-0 flex items-center justify-center z-10 pointer-events-none  "
+    >
+    <!-- agregamos este estilo como valor inicial para que GSAP reconzca el cambio  border radius -->
       <img
-        id="sofa-img"
+        id="sofa-img-circle"
         src="/sofa.jpg"
         alt="sofa de los simpsons"
-        class="fixed w-full h-screen object-cover opacity-0 inset-0"
-      />
-    </div>
-    <div id="bloque-into-screen" class="fixed inset-0 w-full min-h-screen">
+        class="h-full w-auto -z-10 mb-20 object-fill aspect-square"
+        style="border-radius: 50%; transform: scale(0.09);"
+      />     
+      <div id="bloque-into-screen" class="fixed w-full min-h-screen ">
       <IntoScreen />
     </div>
+    </div>
   </div>
+
+
 
   <script>
     import { gsap } from "gsap";
@@ -57,8 +47,16 @@ import IntoScreen from "./IntoScreen.astro";
     tl.to("#img-log", { scale: 120, duration: 3 })
       .to("#img-log", { y: 5200, duration: 3 }, "<")
       .to("#img-log", { x: -800, duration: 3 }, "<")
-      .to("#sofa-img", { opacity: 1 }, "< ") // Aparece el sofá
+      .to("#sofa-img-circle", { marginBottom: "0%" }, "<")
+      .to("#sofa-img-circle", {  scale: 1.9,  }, "< ")
+      .to("#sofa-img-circle", { scale: 1, borderRadius: "0%"   }, "<0.24")
+      .to("#sofa-img-circle", { height: "100%", width: "100%"   }, "<")
+
+
+
+      .to("#sofa-img-circle", {  height: "100%", width: "100%"   }, "<")
       .to("#scroll-content", { opacity: 1, duration: 0.2 }, "<")
+      // .to("#sofa-img", { opacity: 1 }, "< ") // Aparece el sofá
       // .to("#img-log", { opacity: 0, duration: 8 }, "<")
       // aparece un segundo antes del final de la continuacion de la transicion
       // .to("#content-characters", { opacity: 1, duration: 0.5 }, "<0.4")
