@@ -17,7 +17,7 @@ import IntoScreen from "./IntoScreen.astro";
         src="/sofa.jpg"
         alt="sofa de los simpsons"
         class="h-full w-auto -z-10 mb-20 object-fill aspect-square"
-        style="border-radius: 50%; transform: scale(0.09);"
+        style="border-radius: 50%; transform: scale(0.07);"
       />     
       <div id="bloque-into-screen" class="fixed w-full min-h-screen ">
       <IntoScreen />
@@ -51,15 +51,7 @@ import IntoScreen from "./IntoScreen.astro";
       .to("#sofa-img-circle", {  scale: 1.9,  }, "< ")
       .to("#sofa-img-circle", { scale: 1, borderRadius: "0%"   }, "<0.24")
       .to("#sofa-img-circle", { height: "100%", width: "100%"   }, "<")
-
-
-
-      .to("#sofa-img-circle", {  height: "100%", width: "100%"   }, "<")
-      .to("#scroll-content", { opacity: 1, duration: 0.2 }, "<")
-      // .to("#sofa-img", { opacity: 1 }, "< ") // Aparece el sofá
-      // .to("#img-log", { opacity: 0, duration: 8 }, "<")
-      // aparece un segundo antes del final de la continuacion de la transicion
-      // .to("#content-characters", { opacity: 1, duration: 0.5 }, "<0.4")
+    
       .to("#card-1", { opacity: 1, y: -40, duration: 0.8 }, "<0.7") // Homer
       .to("#card-2", { opacity: 1, y: -40, duration: 0.8 }, "<1.1") // Marge
       .to("#card-3", { opacity: 1, y: -40, duration: 0.8 }, "<1.5") // Bart
