@@ -29,31 +29,31 @@ import IntoScreen from "./IntoScreen.astro";
   </div>
 
   <!-- conrtinero -->
-  <div class="w-screen h-full flex justify-center">
+  <div class="w-screen h-full flex justify-center  mx-auto">
     <!-- rieles con nubes -->
     <div
       id="cortina-a"
-      class="flex flex-col  z-30 w-full relative"
+      class="flex flex-col z-30 w-full relative"
     >
-    <!-- usaremos esta tecnica de absolut para posicionar las nubes conforme la maqueta -->
-      <img src="/nube-4.svg" alt=" nube 1" class=" absolute -top-10 left-100 scale-75" />
-      <img src="/nube-3.svg" alt=" nube 1" class=" absolute scale-25  left-90 " />
+    <!-- usaremos porcentajes y viewport units para mejor responsive -->
+      <img src="/nube-4.svg" alt=" nube 1" class="absolute top-[-2.5vh] left-[35%] scale-75 " />
+      <img src="/nube-3.svg" alt=" nube 1" class="absolute scale-25 left-[40%] top-0" />
 
-      <img src="/nube-1.svg" alt=" nube 1" class=" absolute   -left-50 top-20 " />
-      <img src="/nube-4.svg" alt=" nube 1" class=" absolute scale-75 top-60 left-50" />
-      <img src="/nube-2.svg" alt=" nube 1" class=" absolute top-90 scale-120 -left-40" />
-      <img src="/nube-3.svg" alt=" nube 1" class=" absolute scale-75 -left-50 top-150" />
-      <img src="/nube-6.svg" alt=" nube 1" class=" absolute scale-125  top-170 left-40" />
+      <img src="/nube-1.svg" alt=" nube 1" class="absolute left-[-30%] top-[5vh]" />
+      <img src="/nube-4.svg" alt=" nube 1" class="absolute scale-75 top-[25vh] left-[35%]" />
+      <img src="/nube-2.svg" alt=" nube 1" class="absolute top-[42vh] scale-120 left-[-25%]" />
+      <img src="/nube-3.svg" alt=" nube 1" class="absolute scale-75 left-[-30%] top-[67vh]" />
+      <img src="/nube-6.svg" alt=" nube 1" class="absolute scale-125 top-[72vh] left-[25%]" />
 
     </div>
 
-    <div id="cortina-b" class="flex flex-col  w-full relative">
-      <img src="/nube-6.svg" alt=" nube 1" class=" absolute  -top-10" />
-      <img src="/nube-5.svg" alt=" nube 1" class=" absolute scale-65 top-60  left-10 z-10" />
-      <img src="/nube-2.svg" alt=" nube 1" class=" absolute left-75 top-75 z-40" />
-      <img src="/nube-2.svg" alt=" nube 1" class=" absolute left-30 top-150 " />
-      <img src="/nube-2.svg" alt=" nube 1" class=" absolute  -left-10 top-175 z-20" />
-      <img src="/nube-1.svg" alt=" nube 1" class=" absolute  left-95 top-180 " />
+    <div id="cortina-b" class="flex flex-col w-full relative ">
+      <img src="/nube-6.svg" alt=" nube 1" class="absolute top-[-2.5vh] right-0" />
+      <img src="/nube-5.svg" alt=" nube 1" class="absolute scale-65 top-[25vh] left-[15%] z-10" />
+      <img src="/nube-2.svg" alt=" nube 1" class="absolute left-[35%] top-[40vh] z-40" />
+      <img src="/nube-2.svg" alt=" nube 1" class="absolute left-[20%] top-[70vh]" />
+      <img src="/nube-2.svg" alt=" nube 1" class="absolute left-[-8%] top-[80vh] z-20" />
+      <img src="/nube-1.svg" alt=" nube 1" class="absolute left-[43%] top-[80vh]" />
     </div>
   </div>
 </section>
@@ -84,7 +84,6 @@ import IntoScreen from "./IntoScreen.astro";
     .to("#cortina-b", { x: 1500 }, "< ")
     .to("#sofa-img-circle", { scale: 1, borderRadius: "0%" }, "<0.22")
     .to("#sofa-img-circle", { height: "100%", width: "100%" }, "<")
-
     .to("#card-1", { opacity: 1, y: -40, duration: 0.8 }, "<0.7") // Homer
     .to("#card-2", { opacity: 1, y: -40, duration: 0.8 }, "<1.1") // Marge
     .to("#card-3", { opacity: 1, y: -40, duration: 0.8 }, "<1.5") // Bart
