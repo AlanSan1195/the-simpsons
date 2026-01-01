@@ -47,11 +47,11 @@ import IntoScreen from "./IntoScreen.astro";
 
     </div>
 
-    <div id="cortina-b" class="flex flex-col w-full relative ">
+    <div id="cortina-b" class="flex flex-col w-full relative z-30 ">
       <img src="/nube-6.svg" alt=" nube 1" class="absolute top-[-2.5vh] right-0" />
-      <img src="/nube-5.svg" alt=" nube 1" class="absolute scale-65 top-[25vh] left-[15%] z-10" />
-      <img src="/nube-2.svg" alt=" nube 1" class="absolute left-[35%] top-[40vh] z-40" />
-      <img src="/nube-2.svg" alt=" nube 1" class="absolute left-[20%] top-[70vh]" />
+      <img src="/nube-5.svg" alt=" nube 1" class="absolute scale-85 top-[30vh] left-[55%]  " />
+      <img src="/nube-2.svg" alt=" nube 1" class="absolute left-[35%] top-[45vh] z-40" />
+      <img id="nube-detalle" src="/nube-2.svg" alt=" nube 1" class="absolute left-[20%] top-[70vh]" />
       <img src="/nube-2.svg" alt=" nube 1" class="absolute left-[-8%] top-[80vh] z-20" />
       <img src="/nube-1.svg" alt=" nube 1" class="absolute left-[43%] top-[80vh]" />
     </div>
@@ -82,6 +82,7 @@ import IntoScreen from "./IntoScreen.astro";
     .to("#sofa-img-circle", { scale: 1.65 }, "< ")
     .to("#cortina-a", { x: -1500 }, "< ")
     .to("#cortina-b", { x: 1500 }, "< ")
+    .to("#nube-detalle", { x: 1050 }, ">-0.50 ")
     .to("#sofa-img-circle", { scale: 1, borderRadius: "0%" }, "<0.22")
     .to("#sofa-img-circle", { height: "100%", width: "100%" }, "<")
     .to("#card-1", { opacity: 1, y: -40, duration: 0.8 }, "<0.7") // Homer
