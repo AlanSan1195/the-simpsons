@@ -1,122 +1,60 @@
-# Astro Starter Kit: Basics
-
-# 🎬 The Simpsons - Recreación de Animación de Fortnite
+# 🎬 The Simpsons — Recreación de la transición de Fortnite
 
 <div align="center">
-  <img src="/src/assets/simpsons-title.svg" alt="The Simpsons Logo" width="600"/>
+  <img src="./src/assets/simpsons-title.svg" alt="The Simpsons" width="600" />
 </div>
 
-## 🌟 Motivación del Proyecto
+Quise recrear una de mis partes favoritas de Fortnite x Los Simpson: el momento en que la cámara atraviesa el título y entra en otra escena. En esta versión, el scroll te lleva del cielo a la sala de Los Simpson a través de la **«P» de Simpsons**. El proyecto está hecho con Astro, GSAP, ScrollTrigger y Tailwind CSS.
 
- Fortnite acaba de lanzar su temporada con Los Simpsons y que pasada lo que hicieron 🤯 y una de las animaciones que más me encantaron fue la de al iniciar la partida. Al ver esa transición tan fluida y creativa, surgió la curiosidad de replicar y entender cómo funciona ese tipo de animación, aplicando técnicas modernas de desarrollo web.
+## Cómo funcionaba antes
 
-ME encantan Los Simpsons asi que aproveche para aprender y experimentar con animaciones avanzadas usando **GSAP (GreenSock Animation Platform)** y **Astro**.
+En el prototipo coloqué la foto de la sala detrás del título. La foto empezaba como un círculo pequeño y el título crecía mientras se desplazaba en los ejes X e Y. Ajusté a mano esos desplazamientos para que la cámara pareciera entrar por la «P». Por separado, otros tweens ampliaban la foto, quitaban el redondeo y cambiaban su ancho y alto hasta ocupar la pantalla.
 
-## 🎯 Objetivos
+Al bajar, esos ajustes daban la sensación de atravesar la letra. Al subir, se notaba una distorsión en la sala cuando la foto volvía desde pantalla completa hasta el círculo inicial. El cambio de ancho y alto, junto con `object-fill`, permitía que la foto se estirara durante ese recorrido. La alineación también dependía de que coincidieran varias animaciones ajustadas a mano.
 
-- ✅ Recrear la animación de transición inspirada en Fortnite x Los Simpsons
-- 🚧 Integrar contenido dinámico usando [The Simpsons API](https://thesimpsonsapi.com/)
-- 📚 Aprender y documentar el uso de GSAP con ScrollTrigger
-- 🎨 Experimentar con animaciones sincronizadas al scroll
+## La clave de la animación actual
 
-## 🛠️ Tecnologías Utilizadas
+**El título y el recorte comparten la misma transformación, y la sala se encuadra a partir de esa misma escala.** La implementación está en [`Hero.astro`](src/components/Hero.astro).
 
-- **Astro** - Framework web moderno
-- **GSAP 3** - Librería de animación profesional
-- **ScrollTrigger** - Plugin de GSAP para animaciones con scroll
-- **Tailwind CSS** - Framework de estilos
-- **The Simpsons API** - API REST para contenido de Los Simpsons (próximamente)
+Una prueba intermedia usaba la «O». El encuadre final recupera la «P» del prototipo para que la entrada quede justo en el centro de la pantalla.
 
-## 🎓 Conceptos de GSAP Aprendidos
+1. **La «P» abre un hueco real.** El interior de la letra se toma del SVG original y se usa como la zona negra de una máscara. Esa zona deja ver la sala que está detrás del cielo y las nubes. La foto llena el hueco desde el inicio.
+2. **El zoom parte de un punto fijo.** El centro del `viewBox` está en la abertura de la «P». En cada actualización se aplica la misma transformación al título y al recorte, de modo que ambos crecen alrededor de ese punto. El encuadre inicial recupera la distribución original de las nubes y limita el título a su tamaño nativo en pantallas anchas, con el nuevo degradado azul.
+3. **La sala crece sin deformarse.** El código proyecta los bordes del hueco a la pantalla y calcula el tamaño mínimo de la foto para cubrirlos. La foto se mueve y escala con `transform`, manteniendo su proporción de 16:9. Al acercarse al tamaño de la pantalla, el encuadre se ajusta hacia el sofá.
+4. **La sala toma toda la pantalla.** Para saber hasta dónde ampliar el título, el código calcula cuándo las cuatro esquinas de la pantalla caben en una elipse inscrita en la «P». En ese punto el cielo y el título se pueden ocultar sin que se vea un corte. Entonces entran en secuencia las tarjetas de la familia, que se cargan desde [The Simpsons API](https://thesimpsonsapi.com/).
 
-### 1. **gsap.timeline()**
-Permite crear una secuencia de animaciones que se ejecutan en orden o simultáneamente:
+El cálculo central en `drawCamera()` es este:
 
-```javascript
-const tl = gsap.timeline({
-  scrollTrigger: {
-    trigger: "section",
-    start: "top top",
-    end: "bottom bottom",
-    scrub: 1,
-  },
-});
+```js
+const scale = startScale * (endScale / startScale) ** camera.progress;
+const transform = `translate(${centerX} ${centerY}) scale(${scale}) translate(${-centerX} ${-centerY})`;
+
+cameraLayers.forEach((layer) => layer.setAttribute("transform", transform));
 ```
 
-### 2. **ScrollTrigger**
-Plugin que sincroniza animaciones con el scroll del usuario:
+Cada tramo igual de `camera.progress` multiplica la escala por el mismo factor. Eso hace que el acercamiento se sienta gradual aunque el hueco termine mucho más grande que al inicio.
 
-- **`trigger`**: Elemento que activa la animación
-- **`start`**: Punto donde inicia la animación (`"top top"` = cuando el top del trigger toca el top del viewport)
-- **`end`**: Punto donde termina la animación (`"bottom bottom"` = cuando el bottom del trigger toca el bottom del viewport)
-- **`scrub`**: Vincula la animación con la posición del scroll (valor numérico suaviza la transición)
+### Por qué funciona también al regresar
 
-### 3. **Animaciones Simultáneas**
-Uso del operador `"<"` para ejecutar múltiples animaciones al mismo tiempo:
+CSS mantiene la escena en pantalla con `position: sticky`. Una sola timeline de GSAP abre las cortinas de nubes, avanza la cámara y muestra los personajes. ScrollTrigger vincula esa timeline al desplazamiento y `scrub: 0.35` suaviza el seguimiento.
 
-```javascript
-tl.to("#img-log", { scale: 100, duration: 3 })
-  .to("#img-log", { y: 4000, duration: 3 }, "<")
-  .to("#img-log", { x: -800, duration: 3 }, "<")
-  .to("#scroll-content", { opacity: 1, duration: 1 }, "<1");
-```
+Al subir, la timeline recorre los mismos valores en sentido inverso. Para un mismo valor de `camera.progress`, `drawCamera()` calcula el mismo tamaño y encuadre de la sala en ambas direcciones. Así el hueco y la foto vuelven juntos al estado inicial, con la proporción de la imagen intacta. Al redimensionar la ventana se recalculan las escalas y la cobertura. Con la preferencia de movimiento reducido, se muestra directamente la sala.
 
-- Primera animación: escala el logo de 1 a 100
-- Segunda animación (`"<"`): mueve el logo en el eje Y simultáneamente
-- Tercera animación (`"<"`): mueve el logo en el eje X simultáneamente
-- Cuarta animación (`"<1"`): aparece el contenido 1 segundo después del inicio
-
-### 4. **Parámetros Clave de GSAP**
-
-| Parámetro | Descripción |
-|-----------|-------------|
-| `scale` | Escala el elemento (1 = tamaño normal) |
-| `x` / `y` | Traslada el elemento en píxeles |
-| `opacity` | Controla la transparencia (0-1) |
-| `duration` | Duración de la animación en segundos |
-| `scrub` | Sincroniza la animación con el scroll |
-
-## 📦 Instalación
+## Cómo correr el proyecto
 
 ```bash
-# Clonar el repositorio
 git clone https://github.com/AlanSan1195/the-simpsons.git
-
-# Instalar dependencias
+cd the-simpsons
 pnpm install
-
-# Iniciar servidor de desarrollo
 pnpm dev
 ```
 
-## 🚀 Comandos
+Abre `http://localhost:4321`. Usa `pnpm build` para generar la versión de producción y `pnpm preview` para verla en local.
 
-| Comando | Acción |
-|---------|--------|
-| `pnpm dev` | Inicia el servidor en `localhost:4321` |
-| `pnpm build` | Construye el proyecto para producción |
-| `pnpm preview` | Previsualiza el build localmente |
+## Recursos
 
-## 🔮 Próximas Características
+- [Documentación de GSAP](https://gsap.com/docs/v3/)
+- [Documentación de ScrollTrigger](https://gsap.com/docs/v3/Plugins/ScrollTrigger/)
+- [Fortnite](https://www.fortnite.com/)
 
-- 🎭 Integración completa con [The Simpsons API](https://thesimpsonsapi.com/)
-- 🖼️ Galería de personajes animada
-- 🎬 Más transiciones inspiradas en la serie
-- 📱 Optimización para dispositivos móviles
-
-## 🎨 Recursos
-
-- [GSAP Documentation](https://greensock.com/docs/)
-- [ScrollTrigger Demos](https://greensock.com/st-demos/)
-- [The Simpsons API](https://thesimpsonsapi.com/)
-- [Fortnite x The Simpsons](https://www.fortnite.com/)
-
-## 📝 Notas de Aprendizaje
-
-Este proyecto es principalmente educativo y experimental. El objetivo es entender cómo funcionan las animaciones complejas sincronizadas con scroll, y cómo se pueden combinar múltiples transformaciones para crear efectos visuales impactantes.
-
-La elección de Los Simpsons como tema no es casualidad - es una de mis series favoritas, y su API pública es perfecta para practicar la integración de datos externos con animaciones frontend.
-
----
-
-**Dhuo! 💛**
+**¡D'oh! 💛**

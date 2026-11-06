@@ -1,99 +1,384 @@
 ---
+import SimpsonsTitle from "../assets/simpsons-title.svg";
 import IntoScreen from "./IntoScreen.astro";
+
+// Inner contour of the P in Simpsons, with its opening at the camera pivot.
+const aperturePath = "M562.376 249.2C566.776 232.6 562.176 223.2 548.176 221C546.376 221.4 544.376 222.4 541.976 223.8C531.776 237 526.376 253.4 525.776 272.8C545.576 275 557.776 267.2 562.376 249.2Z";
+const pivot = { x: 544, y: 248 };
+const titleWidth = 1074;
+const titleHeight = 580;
+const viewX = pivot.x - titleWidth / 2;
+const viewY = pivot.y - titleHeight / 2;
+const initialSky = { x: viewX - 537, y: viewY - 1800, width: 2148, height: 4180 };
+
+const cloudSizes = {
+  1: [630, 225],
+  2: [669, 252],
+  3: [722, 319],
+  4: [312, 109],
+  5: [591, 329],
+  6: [967, 304],
+};
+
+const cloudCurtains = [
+  {
+    side: "left",
+    clouds: [
+      { asset: 4, left: 0.35, top: -0.025, scale: 0.75 },
+      { asset: 3, left: 0.4, top: 0, scale: 0.25 },
+      { asset: 1, left: -0.3, top: 0.05 },
+      { asset: 4, left: 0.35, top: 0.25, scale: 0.75 },
+      { asset: 2, left: -0.25, top: 0.42, scale: 1.2 },
+      { asset: 3, left: -0.3, top: 0.67, scale: 0.75 },
+      { asset: 6, left: 0.25, top: 0.72, scale: 1.25 },
+    ],
+  },
+  {
+    side: "right",
+    clouds: [
+      { asset: 6, top: -0.025 },
+      { asset: 5, left: 0.55, top: 0.3, scale: 0.85 },
+      { asset: 2, left: 0.2, top: 0.7 },
+      { asset: 1, left: 0.43, top: 0.8 },
+      { asset: 2, left: -0.08, top: 0.8 },
+      { asset: 2, left: 0.35, top: 0.45 },
+    ],
+  },
+] as const;
 ---
 
-<section
-  id="bg-hero"
-  class="relative min-h-[400vh] flex gap-x-4 flex-row overflow-x-hidden"
->
-  <div
-    id="hero-title"
-    class="items-center justify-center flex min-h-screen fixed inset-0 z-20"
-  >
-    <img id="img-log" src="/simpsons-title.svg" alt="" class="z-20 -mb-20" />
-    <div
-      class="w-full h-full fixed inset-0 flex items-center justify-center z-10 pointer-events-none"
+<section class="hero" data-portal-hero aria-label="The Simpsons">
+  <div class="stage" data-portal-stage>
+    <img
+      class="room"
+      data-portal-room
+      src="/sofa.jpg"
+      width="1280"
+      height="720"
+      alt="La sala de Los Simpson"
+      fetchpriority="high"
+    />
+
+    <svg
+      class="intro"
+      data-portal-intro
+      viewBox={`${viewX} ${viewY} ${titleWidth} ${titleHeight}`}
+      aria-hidden="true"
     >
-      <!-- agregamos este estilo como valor inicial para que GSAP reconzca el cambio  border radius -->
-      <img
-        id="sofa-img-circle"
-        src="/sofa.jpg"
-        alt="sofa de los simpsons"
-        class="h-full w-auto -z-10 object-fill aspect-square"
-        style="border-radius: 50%; transform: scale(0.06);"
-      />
-      <div id="bloque-into-screen" class="fixed w-full min-h-screen">
-        <IntoScreen />
-      </div>
-    </div>
-  </div>
+      <defs>
+        <linearGradient id="portal-sky-gradient" x2="0" y2="1">
+          <stop stop-color="#369fda" />
+          <stop offset="1" stop-color="#6bd4ee" />
+        </linearGradient>
+        <mask id="portal-sky-mask" data-portal-mask maskUnits="userSpaceOnUse" {...initialSky}>
+          <rect data-portal-mask-fill {...initialSky} fill="white" />
+          <path
+            data-portal-camera
+            d={aperturePath}
+            fill="black"
+            stroke="black"
+            stroke-width="1"
+          />
+        </mask>
+      </defs>
 
-  <!-- conrtinero -->
-  <div class="w-screen h-full flex justify-center  mx-auto">
-    <!-- rieles con nubes -->
-    <div
-      id="cortina-a"
-      class="flex flex-col z-30 w-full relative"
-    >
-    <!-- usaremos porcentajes y viewport units para mejor responsive -->
-      <img src="/nube-4.svg" alt=" nube 1" class="absolute top-[-2.5vh] left-[35%] scale-75 " />
-      <img src="/nube-3.svg" alt=" nube 1" class="absolute scale-25 left-[40%] top-0" />
+      <g mask="url(#portal-sky-mask)">
+        <svg data-portal-sky {...initialSky}>
+          <rect width="100%" height="100%" fill="url(#portal-sky-gradient)" />
+          {cloudCurtains.map(({ side, clouds }) => (
+            <g data-portal-clouds={side}>
+              {clouds.map((cloud) => {
+                const [width, height] = cloudSizes[cloud.asset];
 
-      <img src="/nube-1.svg" alt=" nube 1" class="absolute left-[-30%] top-[5vh]" />
-      <img src="/nube-4.svg" alt=" nube 1" class="absolute scale-75 top-[25vh] left-[35%]" />
-      <img src="/nube-2.svg" alt=" nube 1" class="absolute top-[42vh] scale-120 left-[-25%]" />
-      <img src="/nube-3.svg" alt=" nube 1" class="absolute scale-75 left-[-30%] top-[67vh]" />
-      <img src="/nube-6.svg" alt=" nube 1" class="absolute scale-125 top-[72vh] left-[25%]" />
+                return (
+                  <image
+                    href={`/nube-${cloud.asset}.svg`}
+                    data-width={width}
+                    data-height={height}
+                    data-left={"left" in cloud ? cloud.left : undefined}
+                    data-top={cloud.top}
+                    data-scale={"scale" in cloud ? cloud.scale : 1}
+                  />
+                );
+              })}
+            </g>
+          ))}
+        </svg>
+      </g>
 
-    </div>
+      <g data-portal-camera>
+        <SimpsonsTitle />
+      </g>
+    </svg>
 
-    <div id="cortina-b" class="flex flex-col w-full relative z-30 ">
-      <img src="/nube-6.svg" alt=" nube 1" class="absolute top-[-2.5vh] right-0" />
-      <img src="/nube-5.svg" alt=" nube 1" class="absolute scale-85 top-[30vh] left-[55%]  " />
-      <img src="/nube-2.svg" alt=" nube 1" class="absolute left-[35%] top-[45vh] z-40" />
-      <img id="nube-detalle" src="/nube-2.svg" alt=" nube 1" class="absolute left-[20%] top-[70vh]" />
-      <img src="/nube-2.svg" alt=" nube 1" class="absolute left-[-8%] top-[80vh] z-20" />
-      <img src="/nube-1.svg" alt=" nube 1" class="absolute left-[43%] top-[80vh]" />
+    <div class="characters">
+      <IntoScreen />
     </div>
   </div>
 </section>
 
+<noscript>
+  <style is:inline>
+    [data-portal-intro] { display: none; }
+    [data-portal-hero] [data-portal-room] { visibility: visible !important; }
+    [data-portal-hero] [id^="card-"] { opacity: 1; }
+  </style>
+</noscript>
+
 <script>
   import { gsap } from "gsap";
   import { ScrollTrigger } from "gsap/ScrollTrigger";
+
   gsap.registerPlugin(ScrollTrigger);
 
-  // configuración basica que uso con frecuencia para mi estrategia de scroll
-  const tl = gsap.timeline({
-    scrollTrigger: {
-      trigger: "section",
-      start: "top top",
-      end: "bottom bottom",
+  const hero = document.querySelector<HTMLElement>("[data-portal-hero]");
+  const stage = hero?.querySelector<HTMLElement>("[data-portal-stage]");
+  const room = hero?.querySelector<HTMLImageElement>("[data-portal-room]");
+  const intro = hero?.querySelector<SVGSVGElement>("[data-portal-intro]");
+  const aperture = intro?.querySelector<SVGPathElement>("mask path");
 
-      scrub: 1,
-    },
-  });
+  if (hero && stage && room && intro && aperture) {
+    gsap.matchMedia().add("(prefers-reduced-motion: no-preference)", () => {
+      const cameraLayers = intro.querySelectorAll("[data-portal-camera]");
+      const skyBounds = intro.querySelectorAll("[data-portal-sky], [data-portal-mask], [data-portal-mask-fill]");
+      const cloudsLeft = intro.querySelector("[data-portal-clouds=left]");
+      const cloudsRight = intro.querySelector("[data-portal-clouds=right]");
+      const cloudLayers = [cloudsLeft, cloudsRight].map((curtain) =>
+        Array.from(curtain?.querySelectorAll<SVGImageElement>("image") ?? [], (image) => ({
+          image,
+          width: Number(image.dataset.width),
+          height: Number(image.dataset.height),
+          left: image.dataset.left,
+          top: Number(image.dataset.top),
+          scale: Number(image.dataset.scale),
+        })),
+      );
+      const cards = hero.querySelectorAll('#content-characters [id^="card-"]');
 
-  // Ambas animaciones al mismo tiempo usando "<"
-  tl.to("#img-log", { scale: 120, duration: 3 })
-    .to("#img-log", { y: 5200, duration: 3 }, "<")
-    .to("#img-log", { x: -800, duration: 3 }, "<")
-    // .to("#sofa-img-circle", { marginBottom: "0%" }, "<")
-    .to("#sofa-img-circle", { scale: 1.65 }, "< ")
-    .to("#cortina-a", { x: -1500 }, "< ")
-    .to("#cortina-b", { x: 1500 }, "< ")
-    .to("#nube-detalle", { x: 1050 }, ">-0.50 ")
-    .to("#sofa-img-circle", { scale: 1, borderRadius: "0%" }, "<0.22")
-    .to("#sofa-img-circle", { height: "100%", width: "100%" }, "<")
-    .to("#card-1", { opacity: 1, y: -40, duration: 0.8 }, "<0.7") // Homer
-    .to("#card-2", { opacity: 1, y: -40, duration: 0.8 }, "<1.1") // Marge
-    .to("#card-3", { opacity: 1, y: -40, duration: 0.8 }, "<1.5") // Bart
-    .to("#card-4", { opacity: 1, y: -40, duration: 0.8 }, "<1.9") // Lisa
-    .to("#card-5", { opacity: 1, y: -40, duration: 0.8 }, "<2.3"); // Maggie
+      const { x: viewX, y: viewY, width: titleWidth, height: titleHeight } = intro.viewBox.baseVal;
+      const centerX = viewX + titleWidth / 2;
+      const centerY = viewY + titleHeight / 2;
+      // An ellipse entirely inside the P, including the offset shadow in the artwork.
+      const opening = { radiusX: 11.5, radiusY: 20 };
+      const outline = aperture.getBBox();
+      const apertureEdges = {
+        left: outline.x - centerX - 1,
+        right: outline.x + outline.width - centerX + 1,
+        top: outline.y - centerY - 1,
+        bottom: outline.y + outline.height - centerY + 1,
+      };
+      const apertureWidth = 2 * Math.max(-apertureEdges.left, apertureEdges.right);
+      const apertureHeight = 2 * Math.max(-apertureEdges.top, apertureEdges.bottom);
+      const ease = gsap.parseEase("sine.inOut");
+      const unit = gsap.utils.clamp(0, 1);
+      const roomFocusX = 0.39;
+      const camera = { progress: 0 };
+      let visibleWidth = titleWidth;
+      let startScale = 1;
+      let endScale = 1;
+      let viewBoxFit = 1;
+      let viewportWidth = 1;
+      let viewportHeight = 1;
+      let roomWidth = 1;
+      let roomHeight = 1;
+      let apertureCover = 1;
+
+      function drawCamera() {
+        const scale = startScale * (endScale / startScale) ** camera.progress;
+        const transform = `translate(${centerX} ${centerY}) scale(${scale}) translate(${-centerX} ${-centerY})`;
+
+        cameraLayers.forEach((layer) => layer.setAttribute("transform", transform));
+
+        const projection = scale * viewBoxFit;
+        const apertureScale = apertureCover * projection;
+        // Ease out of aperture-sized framing as the photo reaches viewport cover.
+        const settle = unit((apertureScale - 0.9) / 0.2);
+        const coverScale = Math.min(apertureScale, 1 - 0.1 * (1 - settle) ** 2);
+        const push = ease(unit((camera.progress - 0.52) / 0.48));
+        const roomScale = coverScale * (1 + 0.08 * push);
+        const halfRoomWidth = roomWidth * roomScale / 2;
+        const halfRoomHeight = roomHeight * roomScale / 2;
+        const reframe = ease(unit((coverScale - 0.55) / 0.45));
+        const finalRoomX = (roomWidth * roomScale - viewportWidth) * (0.5 - roomFocusX);
+
+        // Keep the visible part of the aperture inside the image while reframing.
+        const roomX = gsap.utils.clamp(
+          Math.min(viewportWidth / 2, apertureEdges.right * projection) - halfRoomWidth,
+          Math.max(-viewportWidth / 2, apertureEdges.left * projection) + halfRoomWidth,
+          finalRoomX * reframe,
+        );
+        const roomY = gsap.utils.clamp(
+          Math.min(viewportHeight / 2, apertureEdges.bottom * projection) - halfRoomHeight,
+          Math.max(-viewportHeight / 2, apertureEdges.top * projection) + halfRoomHeight,
+          0,
+        );
+        const baseRoomX = (roomWidth - viewportWidth) * (0.5 - roomFocusX);
+        room.style.transform = `translate(${roomX - baseRoomX}px, ${roomY}px) scale(${roomScale})`;
+      }
+
+      const measureStage = () => {
+        viewportWidth = stage.clientWidth;
+        viewportHeight = stage.clientHeight;
+        viewBoxFit = Math.min(viewportWidth / titleWidth, viewportHeight / titleHeight);
+        // Keep the opening fixed while limiting the starting artwork to its native size.
+        const titleBelowPivot = titleHeight - centerY;
+        startScale = Math.min(1, 1 / viewBoxFit, (viewportHeight * 0.48) / (titleBelowPivot * viewBoxFit));
+        visibleWidth = viewportWidth / viewBoxFit;
+        const visibleHeight = viewportHeight / viewBoxFit;
+        roomWidth = room.offsetWidth;
+        roomHeight = room.offsetHeight;
+        // Match the close crop through the P with room around its irregular edges.
+        apertureCover = 1.12 * Math.max(apertureWidth / roomWidth, apertureHeight / roomHeight);
+
+        // Fit all four viewport corners inside the opening before removing the sky.
+        endScale = 1.04 * Math.hypot(
+          visibleWidth / (2 * opening.radiusX),
+          visibleHeight / (2 * opening.radiusY),
+        );
+
+        const bounds = {
+          x: centerX - visibleWidth / 2 - 1,
+          y: centerY - visibleHeight / 2 - 1,
+          width: visibleWidth + 2,
+          height: visibleHeight + 2,
+        };
+
+        skyBounds.forEach((element) => {
+          for (const [attribute, value] of Object.entries(bounds)) {
+            element.setAttribute(attribute, String(value));
+          }
+        });
+
+        const columnWidth = viewportWidth / 2;
+        cloudLayers.forEach((clouds, column) => {
+          clouds.forEach(({ image, width, height, left, top, scale }) => {
+            const cloudWidth = Math.min(width, columnWidth);
+            const cloudHeight = cloudWidth * height / width;
+            const columnX = left === undefined ? columnWidth - cloudWidth : columnWidth * Number(left);
+            const x = column * columnWidth + columnX + cloudWidth * (1 - scale) / 2;
+            const y = viewportHeight * top + cloudHeight * (1 - scale) / 2;
+
+            image.setAttribute("x", String(1 + x / viewBoxFit));
+            image.setAttribute("y", String(1 + y / viewBoxFit));
+            image.setAttribute("width", String(cloudWidth * scale / viewBoxFit));
+            image.setAttribute("height", String(cloudHeight * scale / viewBoxFit));
+          });
+        });
+      };
+
+      hero.setAttribute("data-portal-motion", "");
+      measureStage();
+      drawCamera();
+
+      const transition = gsap.timeline({
+        defaults: { ease: "sine.inOut" },
+        scrollTrigger: {
+          trigger: hero,
+          start: "top top",
+          end: "bottom bottom",
+          scrub: 0.35,
+          invalidateOnRefresh: true,
+          onRefreshInit: measureStage,
+          onRefresh: drawCamera,
+        },
+      });
+
+      transition
+        .addLabel("clouds", 0)
+        .addLabel("push", 0.2)
+        .to(cloudsLeft, { x: () => -visibleWidth * 0.27, duration: 1.03 }, "clouds")
+        .to(cloudsRight, { x: () => visibleWidth * 0.29, duration: 1.03 }, "clouds")
+        .to(camera, { progress: 1, duration: 1.26, onUpdate: drawCamera }, "push")
+        .addLabel("room", ">")
+        .set(intro, { autoAlpha: 0 }, "room");
+
+      if (cards.length) {
+        transition.to(
+          cards,
+          { opacity: 1, y: -40, duration: 0.32, stagger: 0.06, ease: "power1.out" },
+          "room+=0.06",
+        );
+      }
+
+      return () => {
+        hero.removeAttribute("data-portal-motion");
+        room.style.removeProperty("transform");
+      };
+    });
+  }
 </script>
 
 <style>
-  #img-log {
-    transform-origin: center center;
+  .hero {
+    width: 100%;
+    min-width: 0;
+    background: #6bd4ee;
+  }
+
+  .hero[data-portal-motion] {
+    min-height: 350vh;
+    min-height: 350dvh;
+  }
+
+  .stage {
+    position: sticky;
+    top: 0;
+    isolation: isolate;
+    height: 100vh;
+    height: 100dvh;
+    overflow: hidden;
+    background: #ad697f;
+  }
+
+  .intro {
+    position: absolute;
+    inset: 0;
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .room {
+    position: absolute;
+    display: block;
+    top: 50%;
+    left: 39%;
+    width: max(100%, calc(100vh * 16 / 9));
+    width: max(100%, calc(100dvh * 16 / 9));
+    height: auto;
+    max-width: none;
+    translate: -39% -50%;
+  }
+
+  .intro {
+    z-index: 1;
+    pointer-events: none;
+  }
+
+  .characters {
+    position: absolute;
+    z-index: 2;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    .hero:not([data-portal-motion]) .stage {
+      background: #6bd4ee;
+    }
+
+    .hero:not([data-portal-motion]) :is(.room, .intro) {
+      visibility: hidden;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .intro {
+      display: none;
+    }
+
+    .characters :global([id^="card-"]) {
+      opacity: 1;
+    }
   }
 </style>
