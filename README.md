@@ -6,11 +6,6 @@
 
 Quise recrear una de mis partes favoritas de Fortnite x Los Simpson: el momento en que la cámara atraviesa el título y entra en otra escena. En esta versión, el scroll te lleva del cielo a la sala de Los Simpson a través de la **«P» de Simpsons**. El proyecto está hecho con Astro, GSAP, ScrollTrigger y Tailwind CSS.
 
-## Cómo funcionaba antes
-
-En el prototipo coloqué la foto de la sala detrás del título. La foto empezaba como un círculo pequeño y el título crecía mientras se desplazaba en los ejes X e Y. Ajusté a mano esos desplazamientos para que la cámara pareciera entrar por la «P». Por separado, otros tweens ampliaban la foto, quitaban el redondeo y cambiaban su ancho y alto hasta ocupar la pantalla.
-
-Al bajar, esos ajustes daban la sensación de atravesar la letra. Al subir, se notaba una distorsión en la sala cuando la foto volvía desde pantalla completa hasta el círculo inicial. El cambio de ancho y alto, junto con `object-fill`, permitía que la foto se estirara durante ese recorrido. La alineación también dependía de que coincidieran varias animaciones ajustadas a mano.
 
 ## La clave de la animación actual
 
@@ -40,16 +35,7 @@ CSS mantiene la escena en pantalla con `position: sticky`. Una sola timeline de 
 
 Al subir, la timeline recorre los mismos valores en sentido inverso. Para un mismo valor de `camera.progress`, `drawCamera()` calcula el mismo tamaño y encuadre de la sala en ambas direcciones. Así el hueco y la foto vuelven juntos al estado inicial, con la proporción de la imagen intacta. Al redimensionar la ventana se recalculan las escalas y la cobertura. Con la preferencia de movimiento reducido, se muestra directamente la sala.
 
-## Cómo correr el proyecto
 
-```bash
-git clone https://github.com/AlanSan1195/the-simpsons.git
-cd the-simpsons
-pnpm install
-pnpm dev
-```
-
-Abre `http://localhost:4321`. Usa `pnpm build` para generar la versión de producción y `pnpm preview` para verla en local.
 
 ## Recursos
 
