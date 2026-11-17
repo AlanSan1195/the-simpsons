@@ -52,9 +52,9 @@ const cloudCurtains = [
     <img
       class="room"
       data-portal-room
-      src="/sofa.jpg"
-      width="1280"
-      height="720"
+      src="/backsofa.webp"
+      width="3840"
+      height="2160"
       alt="La sala de Los Simpson"
       fetchpriority="high"
     />
@@ -195,7 +195,7 @@ const cloudCurtains = [
         const settle = unit((apertureScale - 0.9) / 0.2);
         const coverScale = Math.min(apertureScale, 1 - 0.1 * (1 - settle) ** 2);
         const push = ease(unit((camera.progress - 0.52) / 0.48));
-        const roomScale = coverScale * (1 + 0.08 * push);
+        const roomScale = coverScale * (1 + 0.00 * push);
         const halfRoomWidth = roomWidth * roomScale / 2;
         const halfRoomHeight = roomHeight * roomScale / 2;
         const reframe = ease(unit((coverScale - 0.55) / 0.45));
