@@ -3,10 +3,10 @@ const url = "https://thesimpsonsapi.com/api/characters"
 
 interface Characters {
     id: number;
-    name: String;
-    portrait_path: String;
-    age?: number;
-    phrases?: String[];
+    name: string;
+    portrait_path: string;
+    age?: number | null;
+    phrases?: string[];
 }
 export async function fetchSimpsons(): Promise<Characters[]> {
     try {

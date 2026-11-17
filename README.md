@@ -6,6 +6,31 @@
 
 Quise recrear una de mis partes favoritas de Fortnite x Los Simpson: el momento en que la cámara atraviesa el título y entra en otra escena. En esta versión, el scroll te lleva del cielo a la sala de Los Simpson a través de la **«P» de Simpsons**. El proyecto está hecho con Astro, GSAP, ScrollTrigger y Tailwind CSS.
 
+## Desarrollo y validación
+
+Usa Node.js **22.23.4 o superior** y **pnpm 12.16.1**. El archivo `.nvmrc` fija Node.js 26.13.0, la versión usada para validar esta actualización.
+
+```sh
+nvm install
+nvm use
+pnpm install --frozen-lockfile
+pnpm dev
+```
+
+Antes de publicar cambios, ejecuta:
+
+```sh
+pnpm validate # Comprueba tipos y genera dist/
+pnpm preview  # Revisa la compilación localmente
+pnpm audit    # Consulta vulnerabilidades conocidas
+```
+
+La compilación consulta The Simpsons API para generar las cinco tarjetas de la familia, por lo que necesita acceso a internet. Si la API falla, el comportamiento existente es generar la página sin tarjetas; revisa los mensajes de la compilación y su contenido antes de publicarla.
+
+Las dependencias directas están fijadas a versiones exactas: Astro 7.4.12, Tailwind CSS y su plugin de Vite 4.3.5, GSAP 3.15.1 y Astro Check 0.9.12. TypeScript se mantiene en 6.0.3 porque Astro Check admite las versiones 5 y 6, pero todavía no la 7. El lockfile fija también las dependencias transitivas; consérvalo y usa `--frozen-lockfile` en CI.
+
+Astro conserva `compressHTML: true` para mantener el tratamiento de espacios anterior a la migración a la versión 7. Los permisos para ejecutar scripts de dependencias se configuran en `pnpm-workspace.yaml` mediante `allowBuilds`.
+
 
 ## La clave de la animación actual
 

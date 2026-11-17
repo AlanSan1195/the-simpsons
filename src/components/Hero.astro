@@ -183,7 +183,7 @@ const cloudCurtains = [
       let roomHeight = 1;
       let apertureCover = 1;
 
-      function drawCamera() {
+      const drawCamera = () => {
         const scale = startScale * (endScale / startScale) ** camera.progress;
         const transform = `translate(${centerX} ${centerY}) scale(${scale}) translate(${-centerX} ${-centerY})`;
 
@@ -214,7 +214,7 @@ const cloudCurtains = [
         );
         const baseRoomX = (roomWidth - viewportWidth) * (0.5 - roomFocusX);
         room.style.transform = `translate(${roomX - baseRoomX}px, ${roomY}px) scale(${roomScale})`;
-      }
+      };
 
       const measureStage = () => {
         viewportWidth = stage.clientWidth;
